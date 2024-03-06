@@ -1,0 +1,49 @@
+import streamlit as st
+import pandas as pd
+
+def main():
+    st.title("Problème du voyageur de commerce avec Streamlit")
+
+    # Étape 1 : Demander à l'utilisateur le nombre de villes
+    n_villes = st.number_input("Entrez le nombre de villes", min_value=2, step=1)
+
+    # Étape 2 : Demander à l'utilisateur de remplir un fichier Excel avec les distances
+    st.subheader("Remplir le fichier Excel avec les distances entre les villes :")
+    df_distances = saisir_distances_excel(n_villes)
+
+    # Étape 3 : Lire le fichier Excel
+    st.subheader("Matrice des distances :")
+    st.write(df_distances)
+
+    # Étape 4 : Appliquer la méthode de la plus forte descente pour 2-opt
+    if st.button("Appliquer 2-opt"):
+        solution_optimale = deux_opt(df_distances)
+        st.success("Solution optimale trouvée !")
+        st.write("Ordre de visite des villes optimisé :", solution_optimale)
+
+def saisir_distances_excel(n_villes):
+    distances = []
+
+    for i in range(n_villes):
+        distance_ligne = []
+        for j in range(n_villes):
+            if i == j:
+                distance_ligne.append(0)
+            else:
+                distance = st.number_input(f"Distance entre la ville {i+1} et la ville {j+1}", key=f"{i}-{j}")
+                distance_ligne.append(distance)
+        distances.append(distance_ligne)
+
+    # Convertir la liste de distances en DataFrame pandas
+    df_distances = pd.DataFrame(distances, index=[f"Ville {i+1}" for i in range(n_villes)], columns=[f"Ville {i+1}" for i in range(n_villes)])
+
+    return df_distances
+
+def deux_opt(distance_matrix):
+    # Implémentez la méthode de la plus forte descente pour 2-opt ici
+    # Utilisez la matrice de distances pour optimiser l'ordre de visite des villes
+    # Renvoyez l'ordre de visite des villes optimisé
+    pass
+
+if __name__ == "__main__":
+    main()
